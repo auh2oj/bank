@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -14,6 +15,8 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import com.bank.mail.util.Util;
 
 public class UploadEmails {
 	
@@ -49,7 +52,7 @@ public class UploadEmails {
 		for (ArrayList<String> userInfo : userInfoList) {
 			String username = userInfo.get(0);
 			String password = userInfo.get(1);
-			SendMail.sendMail(username, password);
+			SendMail.sendMail(username, password, Util.setHtmlBody(), new HashMap<String, String>());
 		}
 	}
 	
