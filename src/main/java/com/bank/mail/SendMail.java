@@ -18,10 +18,9 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 public class SendMail {
-	public static void sendMail(final String username, final String password,
-			String htmlBody, Map<String, String> mapInlineImages) {
-//		final String username = "synergisticitsessionusc6@gmail.com";
-//		final String password = "session6";
+	public static void sendMail(final String recipient, String htmlBody, Map<String, String> mapInlineImages) {
+		final String username = "synergisticitsessionusc6@gmail.com";
+		final String password = "session6";
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.starttls.enable", "true");
@@ -36,10 +35,10 @@ public class SendMail {
 
 		try {
 			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress("synergisticitsessionusc6@gmail.com"));
+			message.setFrom(new InternetAddress(username));
 			message.setRecipients(Message.RecipientType.TO,
-			InternetAddress.parse("synergisticitsessionusc6@gmail.com"));
-			message.setSubject("Testing Subject");
+			InternetAddress.parse(recipient));
+			message.setSubject("Loan Opportunity!");
 	        message.setSentDate(new Date());
 
 	        // creates message part

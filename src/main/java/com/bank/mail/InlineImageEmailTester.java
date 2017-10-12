@@ -1,14 +1,21 @@
 package com.bank.mail;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class InlineImageEmailTester {
 
 	/**
 	 * main entry of the program
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException, IOException {
 		final String filePath = "//Users//joshuagoldwasser//Pictures//Saved Images//Cool&Interesting//";
 		
 		// SMTP info
@@ -21,6 +28,11 @@ public class InlineImageEmailTester {
 		String mailTo = "trantunglam032016@gmail.com";// "nhiluong2303@icloud.com";
 														// //
 		String subject = "Banking Information";
+		
+		
+		
+		
+		
 		StringBuffer body = new StringBuffer("<!DOCTYPE html>");
 		body.append("<html>");
 		body.append("<head>");
@@ -76,15 +88,22 @@ public class InlineImageEmailTester {
 		Map<String, String> inlineImages = new HashMap<String, String>();
 		inlineImages.put("image1", filePath + "rzv85dn.png");
 		inlineImages.put("image2", filePath + "12523111_1308995862584941_7592751505767359414_n.png");
+		
+		// Get list of emails in Excel sheet
+		List<ArrayList<String>> userInfoList = UploadEmails.uploadEmails(new FileInputStream("emails.xlsx"));
 
 		try {
-			System.out.println("Sending email...");
-			SendMail.sendMail(mailFrom, password, body.toString(), inlineImages);
+			System.out.println("Sending emails...");
+			//SendMail.sendMail(recipient, body.toString(), inlineImages);
 			
-			//final String username, final String password, String htmlBody, Map<String, String> mapInlineImages
-			System.out.println("Email sent.");
+			for (ArrayList<String> userInfo : userInfoList) { //iterate through email list and send emails
+				String recipient = userInfo.get(0);
+				SendMail.sendMail(recipient, body.toString(), inlineImages);
+			}
+			
+			System.out.println("Emails sent.");
 		} catch (Exception ex) {
-			System.out.println("Could not send email.");
+			System.out.println("Could not send emails.");
 			ex.printStackTrace();
 		}
 	}

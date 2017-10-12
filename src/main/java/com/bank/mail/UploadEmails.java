@@ -21,9 +21,11 @@ import com.bank.mail.util.Util;
 public class UploadEmails {
 	
 	//TODO: To be even more object-oriented, create a UserInfo POJO class!
-	private List<ArrayList<String>> userInfoList = new ArrayList<ArrayList<String>>();
+	//private List<ArrayList<String>> userInfoList = new ArrayList<ArrayList<String>>();
 
-	public void uploadEmails(FileInputStream fis) throws IOException {
+	public static List<ArrayList<String>> uploadEmails(FileInputStream fis) throws IOException {
+		
+		List<ArrayList<String>> userInfoList = new ArrayList<ArrayList<String>>();
 		
 		System.out.println("Creating Row Iterator...");		
 		XSSFWorkbook workbook = new XSSFWorkbook(fis);
@@ -46,21 +48,22 @@ public class UploadEmails {
 			}
 			userInfoList.add(userInfo);
 		}
+		return userInfoList;
 	}
 	
 	public void sendEmails(List<ArrayList<String>> userInfoList) {
 		for (ArrayList<String> userInfo : userInfoList) {
-			String username = userInfo.get(0);
-			String password = userInfo.get(1);
-			SendMail.sendMail(username, password, Util.setHtmlBody(), new HashMap<String, String>());
+			String recipient = userInfo.get(0);
+			//String password = userInfo.get(1);
+			SendMail.sendMail(recipient, Util.setHtmlBody(), new HashMap<String, String>());
 		}
 	}
 	
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 		UploadEmails uploadEmails = new UploadEmails();
-		uploadEmails.uploadEmails(new FileInputStream("emails.xlsx"));
+		List<ArrayList<String>> userInfoList = uploadEmails.uploadEmails(new FileInputStream("emails.xlsx"));
 		
-		System.out.println("Contents of List:" + uploadEmails.userInfoList);
-		uploadEmails.sendEmails(uploadEmails.userInfoList);
+		System.out.println("Contents of List:" + userInfoList);
+		uploadEmails.sendEmails(userInfoList);
 	}
 }
